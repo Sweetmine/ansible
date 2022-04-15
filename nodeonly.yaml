@@ -1,0 +1,60 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (CentOS/RedHat)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution in ["RedHat", "CentOS"]
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+- hosts: server
+  become: true
+  tasks:
+
+  - name: Install packages for Each OS Distribution
+    tags: tmux,apache
+    package:
+      name: 
+        - "{{ tmux_package }}"
+        - "{{ apache_package }}"
+      state: latest
+         
+  - name: copy default html file for site
+    tags: apache
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+
+- hosts: node
+  become: true
+  tasks:
+
+  - name: Install mariadb package (RedHat/CentOS)
+    tags: redhat,db,mariadb
+    dnf:
+      name: mariadb
+      state: latest
+    when: ansible_distribution in ["RedHat", "CentOS"]
+
+  - name: Install mariadb package ("Ubuntu")
+    tags: ubuntu,db,mariadb
+    apt:
+      name: mariadb
+      state: latest
+    when: ansible_distribution == "Ubuntu"

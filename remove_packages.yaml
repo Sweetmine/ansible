@@ -9,3 +9,20 @@
         - "{{ tmux_package }}"
         - "{{ apache_package }}"
       state: absent
+
+
+- hosts: node
+  become: true
+  tasks:
+
+  - name: Remove Mariadb (RedHat/CentOS)
+    dnf:
+      name: mariadb
+      state: absent
+    when: ansible_distribution in ["RedHat", "CentOS"]
+
+  - name: Remove Mariadb (Ubuntu)
+    apt:
+      name: mariadb
+      state: absent
+    when: ansible_distribution == "Ubuntu"  
