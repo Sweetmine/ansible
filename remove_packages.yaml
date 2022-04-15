@@ -1,0 +1,9 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+  - name: Remove tmux package
+    dnf:
+      name: tmux
+      state: absent
