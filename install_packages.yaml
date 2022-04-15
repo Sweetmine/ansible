@@ -3,10 +3,11 @@
 - hosts: all
   become: true
   tasks:
-  - name: install packages for CentOS/RedHat
-    dnf:
+ 
+  - name: Install packages for Each OS Distribution
+    package:
       name: 
-        - tmux
-        - httpd
+        - "{{ tmux_package }}"
+        - "{{ apache_package }}"
       state: latest
-    when: ansible_distribution in ["CentOS", "RedHat"]
+      update_cache: yes         
