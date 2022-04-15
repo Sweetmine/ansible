@@ -7,3 +7,4 @@
     dnf:
       name: tmux
       state: absent
+    when: ansible_distribution in ["CentOS","RedHat"]
