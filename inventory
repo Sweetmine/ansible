@@ -1,2 +1,5 @@
+[server]
 rhel85m01.master
+
+[node]
 rhel85w01.worker
