@@ -1,0 +1,40 @@
+- name: Install packages for Each OS Distribution
+  tags: tmux,apache
+  package:
+    name:
+      - "{{ tmux_package }}"
+      - "{{ apache_package }}"
+    state: latest
+
+- name: change email-address for admin
+  tags: apache,httpd
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^ServerAdmin'
+    line: ServerAdmin ansible@demo.com
+  when: ansible_distribution in ["RedHat", "CentOS"]
+  register: httpd
+
+- name: restart httpd (RedHat, CentOS)
+  tags: apache,httpd
+  service:
+    name: httpd
+    state: restarted
+  when: httpd.changed
+
+- name: copy default html file for site
+  tags: apache
+  copy:
+    src: default_site.html
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: 0644
+
+- name: start httpd (RedHat/CentOS)
+  tags: apache, httpd
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  when: ansible_distribution in ["RedHat", "CentOS"]
