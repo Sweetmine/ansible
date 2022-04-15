@@ -2,8 +2,8 @@
 rhel85m01.master
 
 [server]
-rhel85m01.master apache_package=httpd tmux_package=tmux
+rhel85m01.master
 
 [node]
-rhel85w01.worker apache_package=httpd tmux_package=tmux  
+rhel85w01.worker  
 #rhel85w02.worker apache_package=apache2 tmux_package=tmux   eg. ubuntu/debian
