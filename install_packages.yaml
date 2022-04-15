@@ -3,8 +3,10 @@
 - hosts: all
   become: true
   tasks:
-  - name: install tmux package
+  - name: install packages for CentOS/RedHat
     dnf:
-      name: tmux
+      name: 
+        - tmux
+        - httpd
       state: latest
-    when: ansible_distribution in ["CentOS","RedHat"]
+    when: ansible_distribution in ["CentOS", "RedHat"]
